@@ -7,11 +7,13 @@ doc = Nokogiri::HTML(open(url))
 circle_infos = []
 doc.css('#maincontents table').each do |table_node|
   table_node.css('tr').each do |tr_node|
-    circle_info = { block: nil, space_no: nil, space_no_sub: nil, name: nil, kana: nil }
+    circle_info = { block: nil, space_no: nil, space_no_sub: nil, name: nil, kana: nil, url: nil }
     tr_node.css('td').each_with_index do |td_node, index|
       case index
       when 0
         circle_info[:name] = td_node.text
+        a_node = td_node.at_css('a')
+        circle_info[:url] = a_node[:href] if a_node
       when 1
         circle_info[:kana] = td_node.text
       when 2
